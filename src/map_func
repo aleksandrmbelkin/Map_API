@@ -2,13 +2,10 @@ import sys
 import requests
 
 server_address = 'https://static-maps.yandex.ru/v1?'
-api_key = 'f3a0fe3a-b07e-4840-a1da-06f18b2ddf13'
+api_key = '3f2c9a7d-675f-4564-a524-534d14eba8c4'
 
 
-def requesting(dolgota, shirota):
-    oblast = [dolgota, shirota]
-    dolgota, shirota = dolgota, shirota
-    oblast = oblast
+def requesting(dolgota, shirota, oblast):
     ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}'
     map_request = f"{server_address}{ll_spn}&apikey={api_key}"
     response = requests.get(map_request)
@@ -18,6 +15,7 @@ def requesting(dolgota, shirota):
         print(map_request)
         print("Http статус:", response.status_code, "(", response.reason, ")")
         sys.exit(1)
+        
     # Запишем полученное изображение в файл.
     map_file = "map.png"
     with open(map_file, "wb") as file:
