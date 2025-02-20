@@ -6,7 +6,7 @@ api_key = 'f3a0fe3a-b07e-4840-a1da-06f18b2ddf13'
 
 
 def requesting(dolgota, shirota):
-    oblast = [float(input()), float(input())]
+    oblast = [dolgota, shirota]
     dolgota, shirota = dolgota, shirota
     oblast = oblast
     ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}'
