@@ -80,7 +80,7 @@ class Main(QMainWindow):
         
     def keyPressEvent(self, event):
         global dolgota, shirota, oblast, my_path, flag_good_request
-        if str(event.key()) == '87' and dolgota <= 180:
+        if (str(event.key()) == '87' or str(event.key()) == '1062') and dolgota <= 180:
             if flag_good_request:
                 dolgota += 0.01
             else:
@@ -89,7 +89,7 @@ class Main(QMainWindow):
                 elif my_path == 'data/map_down.png':
                     my_path = 'data/map_ctrl.png'
 
-        elif str(event.key()) == '83' and dolgota >= -180:
+        elif (str(event.key()) == '83' or str(event.key()) == '1067') and dolgota >= -180:
             if flag_good_request:
                 dolgota -= 0.01
             else:
@@ -98,7 +98,7 @@ class Main(QMainWindow):
                 elif my_path == 'data/map_up.png':
                     my_path = 'data/map_ctrl.png'
 
-        elif str(event.key()) == '65' and shirota >= -180:
+        elif (str(event.key()) == '65' or str(event.key()) == '1060') and shirota >= -180:
             if flag_good_request:
                 shirota -= 0.01
             else:
@@ -107,7 +107,7 @@ class Main(QMainWindow):
                 elif my_path == 'data/map_right.png':
                     my_path = 'data/map_ctrl.png'
 
-        elif str(event.key()) == '68' and shirota <= 180:
+        elif (str(event.key()) == '68' or str(event.key()) == '1042') and shirota <= 180:
             if flag_good_request:
                 shirota += 0.01
             else:
