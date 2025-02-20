@@ -1,0 +1,14 @@
+def keypress(self, event):
+    global dolgota, shirota, oblast
+    if event.key() == Qt.Key_Up and dolgota <= 180:
+        dolgota += 0.01
+    elif event.key() == Qt.Key_Down and dolgota >= -180:
+        dolgota -= 0.01
+    elif event.key() == Qt.Key_Left and shirota >= -180:
+        shirota -= 0.01
+    elif event.key() == Qt.Key_Right and shirota <= 180:
+        shirota += 0.01
+    elif event.key() == Qt.Key_PageUp:
+        oblast[0] += 0.01
+    elif event.key() == Qt.Key_PageDown:
+        oblast[1] += 0.01
