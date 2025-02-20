@@ -1,7 +1,10 @@
 import requests
+from dotenv import dotenv_values
+
+config = dotenv_values()
 
 server_address = 'https://static-maps.yandex.ru/v1?'
-api_key = 'f3a0fe3a-b07e-4840-a1da-06f18b2ddf13'
+api_key = config['API_KEY']
 
 my_path = 'data/map_ctrl.png'
 def requesting(dolgota, shirota, oblast):
