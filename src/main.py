@@ -84,46 +84,46 @@ class Main(QMainWindow):
             if flag_good_request:
                 dolgota += 0.01
             else:
-                if my_path == 'data/map_ctrl':
-                    my_path = 'data/map_up'
-                elif my_path == 'data/map_down':
-                    my_path = 'data/map_ctrl'
+                if my_path == 'data/map_ctrl.png':
+                    my_path = 'data/map_up.png'
+                elif my_path == 'data/map_down.png':
+                    my_path = 'data/map_ctrl.png'
 
         elif str(event.key()) == '83' and dolgota >= -180:
             if flag_good_request:
                 dolgota -= 0.01
             else:
-                if my_path == 'data/map_ctrl':
-                    my_path = 'data/map_down'
-                elif my_path == 'data/map_up':
-                    my_path = 'data/map_ctrl'
+                if my_path == 'data/map_ctrl.png':
+                    my_path = 'data/map_down.png'
+                elif my_path == 'data/map_up.png':
+                    my_path = 'data/map_ctrl.png'
 
         elif str(event.key()) == '65' and shirota >= -180:
             if flag_good_request:
                 shirota -= 0.01
             else:
-                if my_path == 'data/map_ctrl':
-                    my_path = 'data/map_left'
-                elif my_path == 'data/map_right':
-                    my_path = 'data/map_ctrl'
+                if my_path == 'data/map_ctrl.png':
+                    my_path = 'data/map_left.png'
+                elif my_path == 'data/map_right.png':
+                    my_path = 'data/map_ctrl.png'
 
         elif str(event.key()) == '68' and shirota <= 180:
             if flag_good_request:
                 shirota += 0.01
             else:
-                if my_path == 'data/map_ctrl':
-                    my_path = 'data/map_right'
-                elif my_path == 'data/map_left':
-                    my_path = 'data/map_ctrl'
+                if my_path == 'data/map_ctrl.png':
+                    my_path = 'data/map_right.png'
+                elif my_path == 'data/map_left.png':
+                    my_path = 'data/map_ctrl.png'
 
         elif str(event.key()) == '16777248':
             oblast[0] += 0.01
             oblast[1] += 0.01
-            my_path = 'data/map_shift'
+            my_path = 'data/map_shift.png'
         elif str(event.key()) == '16777249':
             oblast[0] -= 0.01
             oblast[1] -= 0.01
-            my_path = 'data/map_ctrl'
+            my_path = 'data/map_ctrl.png'
         self.req()
 
     def req(self):
