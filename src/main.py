@@ -75,7 +75,7 @@ class Main(QMainWindow):
             dolgota = float(self.lineEdit_3.text())
             shirota = float(self.lineEdit_2.text())
             oblast = [float(self.lineEdit_1.text()), float(self.lineEdit_1.text())]
-            my_path = 'data/map_ctrl.png'
+            my_path = 'data/map.png'
             self.req()
             
             global was_request
@@ -87,7 +87,7 @@ class Main(QMainWindow):
         global dolgota, shirota, oblast, my_path, flag_good_request
         if (str(event.key()) == '87' or str(event.key()) == '1062') and dolgota <= 180:
             if flag_good_request:
-                dolgota += 0.01
+                shirota += 0.1 * oblast[0]
             else:
                 if my_path == 'data/map_ctrl.png':
                     my_path = 'data/map_up.png'
@@ -96,7 +96,7 @@ class Main(QMainWindow):
 
         elif (str(event.key()) == '83' or str(event.key()) == '1067') and dolgota >= -180:
             if flag_good_request:
-                dolgota -= 0.01
+                shirota -= 0.1 * oblast[0]
             else:
                 if my_path == 'data/map_ctrl.png':
                     my_path = 'data/map_down.png'
@@ -105,7 +105,7 @@ class Main(QMainWindow):
 
         elif (str(event.key()) == '65' or str(event.key()) == '1060') and shirota >= -180:
             if flag_good_request:
-                shirota -= 0.01
+                dolgota -= 0.1 * oblast[0]
             else:
                 if my_path == 'data/map_ctrl.png':
                     my_path = 'data/map_left.png'
@@ -114,28 +114,36 @@ class Main(QMainWindow):
 
         elif (str(event.key()) == '68' or str(event.key()) == '1042') and shirota <= 180:
             if flag_good_request:
-                shirota += 0.01
+                dolgota += 0.1 * oblast[0]
             else:
                 if my_path == 'data/map_ctrl.png':
                     my_path = 'data/map_right.png'
                 elif my_path == 'data/map_left.png':
                     my_path = 'data/map_ctrl.png'
 
-        elif str(event.key()) == '16777248':
-            oblast[0] += 0.01
-            oblast[1] += 0.01
-            my_path = 'data/map_shift.png'
         elif str(event.key()) == '16777249':
-            oblast[0] -= 0.01
-            oblast[1] -= 0.01
-            my_path = 'data/map_ctrl.png'
+            if flag_good_request:
+                if int(oblast[0]) * 2 < 90:
+                    oblast[0] *= 2
+                    oblast[1] *= 2
+            else:
+                my_path = 'data/map_ctrl.png'
+        elif str(event.key()) == '16777248':
+            if flag_good_request:
+                if oblast[0] > 0.001:
+                    oblast[0] /= 2
+                    oblast[1] /= 2
+            else:
+                my_path = 'data/map_shift.png'
 
         if was_request:
             self.req()
 
     def req(self):
-        global flag_good_request
+        global flag_good_request, my_path
         flag_good_request = requesting(dolgota, shirota, oblast)
+        if not flag_good_request and my_path == 'data/map.png':
+            my_path = 'data/map_ctrl.png'
         self.show_image()
 
     def show_image(self):
