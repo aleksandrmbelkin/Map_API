@@ -7,8 +7,8 @@ server_address = 'https://static-maps.yandex.ru/v1?'
 api_key = config['API_KEY']
 
 my_path = 'data/map.png'
-def requesting(dolgota, shirota, oblast):
-    ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}'
+def requesting(dolgota, shirota, oblast, theme):
+    ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}&theme={theme}'
     map_request = f"{server_address}{ll_spn}&apikey={api_key}"
     response = requests.get(map_request)
 
