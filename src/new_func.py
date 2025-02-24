@@ -31,15 +31,20 @@ def requesting(dolgota, shirota, oblast, metka_bool=False, theme='light'):
 
 
 def geocode_requesting(geocode, oblast, theme='light'):
-    data = f'geocode={api_key_geocode}'
+    data = f'geocode={api_key_geocode}&format=json'
     map_request = f"{server_address_geocoder}{data}&apikey={api_key_geocode}"
     response = requests.get(map_request)
 
     if response.status_code == 200:
         global my_path
-        a = response.text()
-        dolgota, shirota = a['response']["featureMember"]["GeoObject"]["Point"]["pos"].split()
+        a = response.json()
+        dolgota, shirota = a['response']["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split()
         dolgota = float(dolgota)
         shirota = float(shirota)
+        print(dolgota, shirota)
         requesting(dolgota, shirota, oblast, metka_bool=True, theme=theme)
         return True
+    else:
+        print(response.status_code, response.reason)
+        return False
+        
