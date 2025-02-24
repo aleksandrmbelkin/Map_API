@@ -6,7 +6,7 @@ config = dotenv_values()
 server_address = 'https://static-maps.yandex.ru/v1?'
 api_key = config['API_KEY']
 
-my_path = 'data/map_ctrl.png'
+my_path = 'data/map.png'
 def requesting(dolgota, shirota, oblast):
     ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}'
     map_request = f"{server_address}{ll_spn}&apikey={api_key}"
@@ -14,10 +14,11 @@ def requesting(dolgota, shirota, oblast):
 
     if response.status_code == 200:
         global my_path
-        map_file = "data/map_ctrl.png"
+        map_file = "data/map.png"
         with open(map_file, "wb") as file:
             file.write(response.content)
-        my_path = 'data/map_ctrl.png'
+        my_path = 'data/map.png'
         return True
     else:
+        print(response.status_code, response.reason)
         return False
