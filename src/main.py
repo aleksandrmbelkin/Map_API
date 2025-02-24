@@ -4,9 +4,11 @@ from map_func import *
 import sys
 
 # У меня на клавиатуре нет Page Up/Down поэтому я их переставил на другие кнопки:
-# PageUp = Left Shift
-# PageDown = Left Ctrl
+# Приближение = Left Shift
+# Отдаление = Left Ctrl
+# Смена темы = T
 
+theme = 'light'
 dolgota = 0
 shirota = 0
 oblast = [0, 0]
@@ -85,6 +87,7 @@ class Main(QMainWindow):
         
     def keyPressEvent(self, event):
         global dolgota, shirota, oblast, my_path, flag_good_request
+        print(str(event.key()))
         if (str(event.key()) == '87' or str(event.key()) == '1062') and dolgota <= 180:
             if flag_good_request:
                 shirota += 0.1 * oblast[0]
@@ -135,13 +138,19 @@ class Main(QMainWindow):
                     oblast[1] /= 2
             else:
                 my_path = 'data/map_shift.png'
+        elif str(event.key()) == '84':
+            global theme
+            if theme == 'light':
+                theme = 'dark'
+            else:
+                theme = 'light'
 
         if was_request:
             self.req()
 
     def req(self):
         global flag_good_request, my_path
-        flag_good_request = requesting(dolgota, shirota, oblast)
+        flag_good_request = requesting(dolgota, shirota, oblast, theme)
         if not flag_good_request and my_path == 'data/map.png':
             my_path = 'data/map_ctrl.png'
         self.show_image()
