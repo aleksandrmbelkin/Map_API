@@ -1,14 +1,21 @@
 import requests
 from dotenv import dotenv_values
-
 config = dotenv_values()
 
 server_address = 'https://static-maps.yandex.ru/v1?'
+server_address_geocoder = 'http://geocode-maps.yandex.ru/1.x/?'
+
 api_key = config['API_KEY']
+api_key_geocode = config['API_KEY_GEOCODE']
 
 my_path = 'data/map.png'
-def requesting(dolgota, shirota, oblast, theme):
-    ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}&theme={theme}'
+
+
+def requesting(dolgota, shirota, oblast, theme, metka_bool=False):
+    if metka_bool:
+        ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}&theme={theme}&pt={dolgota},{shirota}'
+    else:
+        ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}&theme={theme}'
     map_request = f"{server_address}{ll_spn}&apikey={api_key}"
     response = requests.get(map_request)
 
@@ -22,3 +29,19 @@ def requesting(dolgota, shirota, oblast, theme):
     else:
         print(response.status_code, response.reason)
         return False
+
+
+def geocode_requesting(geocode):
+    data = f'geocode={geocode}&format=json'
+    map_request = f"{server_address_geocoder}{data}&apikey={api_key_geocode}"
+    response = requests.get(map_request)
+
+    if response.status_code == 200:
+        a = response.json()
+        dolgota, shirota = a['response']["GeoObjectCollection"]["featureMember"][0]["GeoObject"]["Point"]["pos"].split()
+        dolgota = float(dolgota)
+        shirota = float(shirota)
+        return True, dolgota, shirota
+    else:
+        print(response.status_code, response.reason)
+        return False, None, None
