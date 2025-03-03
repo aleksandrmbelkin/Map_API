@@ -119,11 +119,11 @@ class Main(QMainWindow):
                 shirota_met = shirota
                 dolgota_met = dolgota
             self.req()
-            
+
             global was_request
             was_request = True
         except Exception:
-             print('Неправильные значения!')
+            print('Неправильные значения!')
 
     def keyPressEvent(self, event):
         global dolgota, shirota, oblast, my_path, flag_good_request
