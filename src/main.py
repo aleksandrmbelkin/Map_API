@@ -12,6 +12,8 @@ geocode = ''
 theme = 'light'
 dolgota = 0
 shirota = 0
+dolgota_met = 0
+shirota_met = 0
 oblast = [1, 1]
 flag_good_request = True
 was_request = False
@@ -103,17 +105,19 @@ class Main(QMainWindow):
             print('Неправильные значения!')
         
     def search(self):
-        global dolgota, shirota, oblast, flag_good_request, my_path, geocode, geo
-        try:
-            if self.geocode_line.text() != '':
-                geocode = '+'.join(self.geocode_line.text().split())
-                flag_good_request, dolgota, shirota= geocode_requesting(geocode, oblast, theme)
-            self.req()
-            
-            global was_request
-            was_request = True
-        except Exception:
-            print('Неправильные значения!')
+        global dolgota, shirota, oblast, flag_good_request, my_path, geocode, dolgota_met, shirota_met
+        # try:
+        if self.geocode_line.text() != '':
+            geocode = '+'.join(self.geocode_line.text().split())
+            flag_good_request, dolgota, shirota = geocode_requesting(geocode)
+            shirota_met = shirota
+            dolgota_met = dolgota
+        self.req()
+        
+        global was_request
+        was_request = True
+        # except Exception:
+        #     print('Неправильные значения!')
 
     def keyPressEvent(self, event):
         global dolgota, shirota, oblast, my_path, flag_good_request
@@ -182,7 +186,7 @@ class Main(QMainWindow):
 
     def req(self):
         global flag_good_request, my_path, dolgota, shirota
-        flag_good_request = requesting(dolgota, shirota, oblast, theme, geocode)
+        flag_good_request = requesting(dolgota, shirota, oblast, theme, dolgota_met, shirota_met, geocode)
         if not flag_good_request and my_path == 'data/map.png':
             my_path = 'data/map_ctrl.png'
         self.show_image()
