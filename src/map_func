@@ -11,9 +11,9 @@ api_key_geocode = config['API_KEY_GEOCODE']
 my_path = 'data/map.png'
 
 
-def requesting(dolgota, shirota, oblast, theme, metka_bool=False):
+def requesting(dolgota, shirota, oblast, theme, dolgota_met, shirota_met, metka_bool=False):
     if metka_bool:
-        ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}&theme={theme}&pt={dolgota},{shirota}'
+        ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}&theme={theme}&pt={dolgota_met},{shirota_met}'
     else:
         ll_spn = f'll={dolgota},{shirota}&spn={oblast[0]},{oblast[1]}&theme={theme}'
     map_request = f"{server_address}{ll_spn}&apikey={api_key}"
