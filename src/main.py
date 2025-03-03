@@ -71,6 +71,11 @@ class Main(QMainWindow):
         self.pushButton_geo.setObjectName("pushButton_geo")
         self.pushButton_geo.clicked.connect(self.search)
 
+        self.pushButton_geo_sbros = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.pushButton_geo_sbros.setGeometry(QtCore.QRect(430, 680, 180, 23))
+        self.pushButton_geo_sbros.setObjectName("pushButton_geo")
+        self.pushButton_geo_sbros.clicked.connect(self.search)
+
         Main.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=Main)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 625, 22))
@@ -88,6 +93,7 @@ class Main(QMainWindow):
         self.label_3.setText(_translate("Main", "Область"))
         self.pushButton.setText(_translate("Main", "Показать"))
         self.pushButton_geo.setText(_translate("Main", "Искать"))
+        self.pushButton_geo_sbros.setText(_translate("Main", "Сброс поискового результата"))
 
     def start(self):
         global dolgota, shirota, oblast, flag_good_request, my_path, geocode
@@ -106,18 +112,18 @@ class Main(QMainWindow):
         
     def search(self):
         global dolgota, shirota, oblast, flag_good_request, my_path, geocode, dolgota_met, shirota_met
-        # try:
-        if self.geocode_line.text() != '':
-            geocode = '+'.join(self.geocode_line.text().split())
-            flag_good_request, dolgota, shirota = geocode_requesting(geocode)
-            shirota_met = shirota
-            dolgota_met = dolgota
-        self.req()
-        
-        global was_request
-        was_request = True
-        # except Exception:
-        #     print('Неправильные значения!')
+        try:
+            if self.geocode_line.text() != '':
+                geocode = '+'.join(self.geocode_line.text().split())
+                flag_good_request, dolgota, shirota = geocode_requesting(geocode)
+                shirota_met = shirota
+                dolgota_met = dolgota
+            self.req()
+            
+            global was_request
+            was_request = True
+        except Exception:
+             print('Неправильные значения!')
 
     def keyPressEvent(self, event):
         global dolgota, shirota, oblast, my_path, flag_good_request
