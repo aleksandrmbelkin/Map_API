@@ -8,10 +8,11 @@ import sys
 # Отдаление = Left Ctrl
 # Смена темы = T
 
+geocode = ''
 theme = 'light'
 dolgota = 0
 shirota = 0
-oblast = [0, 0]
+oblast = [1, 1]
 flag_good_request = True
 was_request = False
 
@@ -22,38 +23,51 @@ class Main(QMainWindow):
 
     def setupUi(self, Main):
         Main.setObjectName("Main")
-        Main.resize(625, 656)
+        Main.resize(625, 750)
         self.centralwidget = QtWidgets.QWidget(parent=Main)
         self.centralwidget.setObjectName("centralwidget")
+        
+        self.label_geo = QtWidgets.QLabel(parent=self.centralwidget)
+        self.label_geo.setGeometry(QtCore.QRect(30, 660, 100, 14))
+        self.label_geo.setObjectName("label_geo")
+
+        self.geocode_line = QtWidgets.QLineEdit(parent=self.centralwidget)
+        self.geocode_line.setGeometry(QtCore.QRect(10, 680, 151, 41))
+        self.geocode_line.setObjectName("geocode")
 
         self.lineEdit_1 = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.lineEdit_1.setGeometry(QtCore.QRect(440, 560, 151, 41))
+        self.lineEdit_1.setGeometry(QtCore.QRect(440, 590, 151, 41))
         self.lineEdit_1.setObjectName("lineEdit_1")
 
         self.lineEdit_2 = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.lineEdit_2.setGeometry(QtCore.QRect(225, 560, 151, 41))
+        self.lineEdit_2.setGeometry(QtCore.QRect(225, 590, 151, 41))
         self.lineEdit_2.setObjectName("lineEdit_2")
 
         self.lineEdit_3 = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.lineEdit_3.setGeometry(QtCore.QRect(10, 560, 151, 41))
+        self.lineEdit_3.setGeometry(QtCore.QRect(10, 590, 151, 41))
         self.lineEdit_3.setObjectName("lineEdit_3")
 
         self.label = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(50, 530, 47, 14))
+        self.label.setGeometry(QtCore.QRect(50, 560, 47, 14))
         self.label.setObjectName("label")
 
         self.label_2 = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(270, 530, 47, 14))
+        self.label_2.setGeometry(QtCore.QRect(275, 560, 47, 14))
         self.label_2.setObjectName("label_2")
 
         self.label_3 = QtWidgets.QLabel(parent=self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(490, 530, 47, 14))
+        self.label_3.setGeometry(QtCore.QRect(490, 560, 47, 14))
         self.label_3.setObjectName("label_3")
 
         self.pushButton = QtWidgets.QPushButton(parent=self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(260, 620, 75, 23))
+        self.pushButton.setGeometry(QtCore.QRect(260, 530, 75, 23))
         self.pushButton.setObjectName("pushButton")
         self.pushButton.clicked.connect(self.start)
+
+        self.pushButton_geo = QtWidgets.QPushButton(parent=self.centralwidget)
+        self.pushButton_geo.setGeometry(QtCore.QRect(260, 680, 75, 23))
+        self.pushButton_geo.setObjectName("pushButton_geo")
+        self.pushButton_geo.clicked.connect(self.search)
 
         Main.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(parent=Main)
@@ -66,17 +80,20 @@ class Main(QMainWindow):
     def retranslateUi(self, Main):
         _translate = QtCore.QCoreApplication.translate
         Main.setWindowTitle(_translate("Map_API", "Map_API"))
+        self.label_geo.setText(_translate("Main", "Введите запрос"))
         self.label.setText(_translate("Main", "Долгота"))
         self.label_2.setText(_translate("Main", "Широта"))
         self.label_3.setText(_translate("Main", "Область"))
         self.pushButton.setText(_translate("Main", "Показать"))
+        self.pushButton_geo.setText(_translate("Main", "Искать"))
 
     def start(self):
-        global dolgota, shirota, oblast, flag_good_request, my_path
+        global dolgota, shirota, oblast, flag_good_request, my_path, geocode
         try:
             dolgota = float(self.lineEdit_3.text())
             shirota = float(self.lineEdit_2.text())
             oblast = [float(self.lineEdit_1.text()), float(self.lineEdit_1.text())]
+            geocode = ''
             my_path = 'data/map.png'
             self.req()
             
@@ -85,9 +102,22 @@ class Main(QMainWindow):
         except Exception:
             print('Неправильные значения!')
         
+    def search(self):
+        global dolgota, shirota, oblast, flag_good_request, my_path, geocode, geo
+        try:
+            if self.geocode_line.text() != '':
+                geocode = '+'.join(self.geocode_line.text().split())
+                flag_good_request, dolgota, shirota= geocode_requesting(geocode, oblast, theme)
+            self.req()
+            
+            global was_request
+            was_request = True
+        except Exception:
+            print('Неправильные значения!')
+
     def keyPressEvent(self, event):
         global dolgota, shirota, oblast, my_path, flag_good_request
-        print(str(event.key()))
+        # print(str(event.key()))
         if (str(event.key()) == '87' or str(event.key()) == '1062') and dolgota <= 180:
             if flag_good_request:
                 shirota += 0.1 * oblast[0]
@@ -132,25 +162,27 @@ class Main(QMainWindow):
             else:
                 my_path = 'data/map_ctrl.png'
         elif str(event.key()) == '16777248':
-            if flag_good_request:
+            if flag_good_request:   
                 if oblast[0] > 0.001:
                     oblast[0] /= 2
                     oblast[1] /= 2
             else:
                 my_path = 'data/map_shift.png'
-        elif str(event.key()) == '84':
+        elif str(event.key()) == '84' or str(event.key()) == '1045':
             global theme
             if theme == 'light':
                 theme = 'dark'
             else:
                 theme = 'light'
+        elif str(event.key()) == '16777220':
+            self.search()
 
         if was_request:
             self.req()
 
     def req(self):
-        global flag_good_request, my_path
-        flag_good_request = requesting(dolgota, shirota, oblast, theme)
+        global flag_good_request, my_path, dolgota, shirota
+        flag_good_request = requesting(dolgota, shirota, oblast, theme, geocode)
         if not flag_good_request and my_path == 'data/map.png':
             my_path = 'data/map_ctrl.png'
         self.show_image()
